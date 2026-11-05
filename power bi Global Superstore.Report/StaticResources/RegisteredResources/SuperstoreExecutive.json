@@ -1,0 +1,24 @@
+{
+  "name": "Superstore Blue",
+  "dataColors": [
+    "#2D6ED2",
+    "#90ABD5",
+    "#CCD6E5",
+    "#204F97",
+    "#5E86C4",
+    "#B5C5E0",
+    "#7FA2DA",
+    "#4FD1A0"
+  ],
+  "background": "#17325B",
+  "foreground": "#E4EAF3",
+  "tableAccent": "#2D6ED2",
+  "foregroundNeutralSecondary": "#90ABD5",
+  "foregroundNeutralTertiary": "#7088B0",
+  "backgroundLight": "#1D3F70",
+  "backgroundNeutral": "#2A4A7A",
+  "secondaryBackground": "#1D3F70",
+  "good": "#4FD1A0",
+  "neutral": "#90ABD5",
+  "bad": "#F0696B"
+}

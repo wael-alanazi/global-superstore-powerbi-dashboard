@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "power bi Global Superstore"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "e7afd404-fb43-4496-ae7c-5c1c2e8674e7"
+  }
+}

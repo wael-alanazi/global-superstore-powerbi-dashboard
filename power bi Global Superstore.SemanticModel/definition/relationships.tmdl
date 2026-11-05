@@ -1,0 +1,21 @@
+relationship AutoDetected_7eaadabd-2438-4d8d-ab55-dbb62e403f13
+	fromColumn: Fact_Orders.'Customer ID'
+	toColumn: Dim_Customers.'Customer ID'
+
+relationship AutoDetected_a23e44af-eb1c-4cbf-a614-85d80478e7f5
+	fromColumn: Fact_Orders.'Product ID'
+	toColumn: Dim_Products.'Product ID'
+
+relationship AutoDetected_cc6b0240-183d-4c18-9480-df6f860d432a
+	fromColumn: Fact_Orders.'Location Key'
+	toColumn: Dim_Geography.'Location Key'
+
+relationship 5962d131-0e58-68b1-8a75-5bd9e9a48ac1
+	fromColumn: Fact_Orders.'Order Date'
+	toColumn: Dim_Date.Date
+
+relationship 1af5d936-6459-2b71-1997-79730200927f
+	isActive: false
+	fromColumn: Fact_Orders.'Ship Date'
+	toColumn: Dim_Date.Date
+

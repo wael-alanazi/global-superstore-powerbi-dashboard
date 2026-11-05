@@ -1,0 +1,123 @@
+expression stg_Superstore_Raw =
+		let
+		    Source = Csv.Document(File.Contents(Filepath), [Delimiter = "#(tab)", Columns = 27, Encoding = 65001, QuoteStyle = QuoteStyle.None]),
+		    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true])
+		in
+		    #"Promoted Headers"
+	lineageTag: 1dcf4cad-77f3-4165-9b50-d372bf6d2786
+	queryGroup: Row_data
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression Cleaning_Customers =
+		let
+		    Source = stg_Superstore_Raw,
+		    #"Removed Other Columns" = Table.SelectColumns(Source,{"Customer Name", "Customer ID", "Segment"}),
+		    #"Trimmed Text" = Table.TransformColumns(#"Removed Other Columns",{{"Customer ID", Text.Trim, type text}, {"Customer Name", Text.Trim, type text}, {"Segment", Text.Trim, type text}}),
+		    #"Removed Duplicates" = Table.Distinct(#"Trimmed Text", {"Customer ID", "Customer Name"}),
+		    #"Reordered Columns" = Table.ReorderColumns(#"Removed Duplicates",{"Customer ID", "Customer Name", "Segment"})
+		in
+		    #"Reordered Columns"
+	lineageTag: 26d883fd-8621-4177-88dd-f75e603e1921
+	queryGroup: Cleaning
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression Cleaning_Products =
+		let
+		    Source = stg_Superstore_Raw,
+		    #"Removed Other Columns" = Table.SelectColumns(Source,{"Category", "Product ID", "Product Name", "Sub-Category"}),
+		    #"Reordered Columns" = Table.ReorderColumns(#"Removed Other Columns",{"Product ID", "Category", "Product Name", "Sub-Category"}),
+		  #"Trimmed text" = Table.TransformColumns(#"Reordered Columns", {{"Product ID", each Text.Trim(_), type nullable text}, {"Category", each Text.Trim(_), type nullable text}, {"Product Name", each Text.Trim(_), type nullable text}, {"Sub-Category", each Text.Trim(_), type nullable text}}),
+		  #"Grouped rows" = Table.Group(#"Trimmed text", {"Product ID", "Category", "Product Name", "Sub-Category"}, {{"Count", each Table.RowCount(_), Int64.Type}}),
+		  #"Sorted rows" = Table.Buffer(Table.Sort(#"Grouped rows", {{"Count", Order.Descending}, {"Product Name", Order.Ascending}})),
+		  #"Removed duplicates" = Table.Distinct(#"Sorted rows", {"Product ID"}),
+		  #"Removed columns" = Table.RemoveColumns(#"Removed duplicates", {"Count"}),
+		  #"Reordered columns 1" = Table.ReorderColumns(#"Removed columns", {"Product ID", "Product Name", "Category", "Sub-Category"})
+		in
+		    #"Reordered columns 1"
+	lineageTag: f86bd537-bfb6-4af2-8fc8-3d7b7b31f609
+	queryGroup: Cleaning
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression Cleaning_Geography =
+		let
+		    Source = stg_Superstore_Raw,
+		    Selected = Table.SelectColumns(Source, {"City", "State", "Country", "Region", "Market"}),
+		    Trimmed = Table.TransformColumns(Selected, {
+		        {"City", Text.Trim, type text},
+		        {"State", Text.Trim, type text},
+		        {"Country", Text.Trim, type text},
+		        {"Region", Text.Trim, type text},
+		        {"Market", Text.Trim, type text}
+		    }),
+		    Distinct = Table.Distinct(Trimmed),
+		    LocationKey = Table.AddColumn(Distinct, "Location Key",
+		        each Text.Combine({[City], [State], [Country], [Region], [Market]}, "|"), type text),
+		    Result = Table.ReorderColumns(LocationKey, {"Location Key", "City", "State", "Country", "Region", "Market"})
+		in
+		    Result
+	lineageTag: 806f62a6-8adf-471e-9db2-7b99d3d9724c
+	queryGroup: Cleaning
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression Cleaning_Orders =
+		let
+		    Source = stg_Superstore_Raw,
+		
+		    Selected = Table.SelectColumns(Source, {
+		        "Row ID", "Order ID", "Customer ID", "Order Date", "Order Priority",
+		        "Product ID", "Discount", "Sales", "Profit", "Quantity",
+		        "Ship Date", "Ship Mode", "Shipping Cost",
+		        "City", "State", "Country", "Region", "Market"
+		    }),
+		
+		    Typed = Table.TransformColumnTypes(Selected, {
+		        {"Row ID", Int64.Type},
+		        {"Order Date", type datetime},
+		        {"Ship Date", type datetime},
+		        {"Discount", type number},
+		        {"Sales", type number},
+		        {"Profit", type number},
+		        {"Quantity", Int64.Type},
+		        {"Shipping Cost", type number}
+		    }),
+		
+		    Trimmed = Table.TransformColumns(Typed, {
+		        {"Order ID", Text.Trim, type text},
+		        {"Customer ID", Text.Trim, type text},
+		        {"Product ID", Text.Trim, type text},
+		        {"City", Text.Trim, type text},
+		        {"State", Text.Trim, type text},
+		        {"Country", Text.Trim, type text},
+		        {"Region", Text.Trim, type text},
+		        {"Market", Text.Trim, type text}
+		    }),
+		
+		    LocationKey = Table.AddColumn(Trimmed, "Location Key",
+		        each Text.Combine({[City], [State], [Country], [Region], [Market]}, "|"), type text),
+		
+		    Result = Table.RemoveColumns(LocationKey, {"City", "State", "Country", "Region", "Market"}),
+		  #"Changed column type" = Table.TransformColumnTypes(Result, {{"Order Date", type date}, {"Ship Date", type date}})
+		in
+		    #"Changed column type"
+	lineageTag: 5eb4d362-7a90-4b78-9694-d439a1fb97a8
+	queryGroup: Cleaning
+
+	annotation PBI_ResultType = Table
+
+expression Filepath = "C:\Data\Global Superstore.txt" meta [IsParameterQuery = true, IsParameterQueryRequired = false, Type = type text]
+	lineageTag: b9c85eed-8b4f-4cf6-ac16-8239b4dbe748
+
+	annotation PBI_ResultType = Text
+

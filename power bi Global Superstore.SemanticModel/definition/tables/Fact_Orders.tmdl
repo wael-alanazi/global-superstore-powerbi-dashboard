@@ -1,0 +1,156 @@
+table Fact_Orders
+	lineageTag: 91fa168e-5139-40df-a9b0-48f81c4c0491
+
+	column 'Row ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: e0d6e92b-2924-4389-964c-04a05f56ca09
+		summarizeBy: count
+		sourceColumn: Row ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Order ID'
+		dataType: string
+		lineageTag: c91a40a2-ce90-47cf-8a6f-bab7b53038d4
+		summarizeBy: none
+		sourceColumn: Order ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Customer ID'
+		dataType: string
+		lineageTag: b2dbe138-0b93-4818-83f0-53b3462bcbc1
+		summarizeBy: none
+		sourceColumn: Customer ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Order Date'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 76db3d35-3ece-460c-82df-45f4e1e32526
+		summarizeBy: none
+		sourceColumn: Order Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Order Priority'
+		dataType: string
+		lineageTag: db875b9d-3c5d-4144-a2b8-b71c9ebf0b27
+		summarizeBy: none
+		sourceColumn: Order Priority
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Product ID'
+		dataType: string
+		lineageTag: d497e189-98e6-4e5c-b2f8-cc25bc553ae0
+		summarizeBy: none
+		sourceColumn: Product ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Discount
+		dataType: double
+		lineageTag: 7bb96cf7-3a7d-485b-a54a-ff4c28c7cd88
+		summarizeBy: sum
+		sourceColumn: Discount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Sales
+		dataType: double
+		lineageTag: 9474fa64-f3b8-4d88-a24f-f3cbcb9892e2
+		summarizeBy: sum
+		sourceColumn: Sales
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Profit
+		dataType: double
+		lineageTag: 2db01dc9-0a2e-4477-9eeb-22474019d92d
+		summarizeBy: sum
+		sourceColumn: Profit
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Quantity
+		dataType: int64
+		formatString: 0
+		lineageTag: 465f119e-b8d2-403d-a2a1-84f3e3ec6dec
+		summarizeBy: sum
+		sourceColumn: Quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ship Date'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 45f33107-d9b6-46ef-a73e-bfe6f8f6e981
+		summarizeBy: none
+		sourceColumn: Ship Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Ship Mode'
+		dataType: string
+		lineageTag: ad019907-7b77-498c-88dc-0d58b3973ada
+		summarizeBy: none
+		sourceColumn: Ship Mode
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Shipping Cost'
+		dataType: double
+		lineageTag: c1f958f3-0000-4445-a04c-34d584ee3868
+		summarizeBy: sum
+		sourceColumn: Shipping Cost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Location Key'
+		dataType: string
+		lineageTag: 36667c5f-9079-487d-a959-249be18bd93d
+		summarizeBy: none
+		sourceColumn: Location Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Order Result' = IF(Fact_Orders[Profit] < 0, "Loss", "Profit")
+		dataType: string
+		lineageTag: a9ddd043-8277-4423-968c-8fc8bd0ecee1
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Discount Band' = SWITCH(TRUE(), Fact_Orders[Discount] = 0, "No discount", Fact_Orders[Discount] <= 0.2, "1-20%", Fact_Orders[Discount] <= 0.4, "21-40%", "Over 40%")
+		dataType: string
+		lineageTag: 5a253dee-a1e2-4ab7-b0b9-80442a35848d
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Fact_Orders = m
+		mode: import
+		queryGroup: Data_Model
+		source =
+				let
+				  Source = Cleaning_Orders
+				in
+				  Source
+
+	annotation PBI_ResultType = Table
+

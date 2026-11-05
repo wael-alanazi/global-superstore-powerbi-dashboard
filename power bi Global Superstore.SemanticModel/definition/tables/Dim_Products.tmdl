@@ -1,0 +1,48 @@
+table Dim_Products
+	lineageTag: fd1b9a97-bc38-4024-a165-102bf9c6d0ba
+
+	column 'Product ID'
+		dataType: string
+		lineageTag: ac462029-8af7-44f1-82dd-3df997f8bb72
+		summarizeBy: none
+		sourceColumn: Product ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category
+		dataType: string
+		lineageTag: e9144ce5-5ec8-4e54-abed-b0da0b1b4435
+		summarizeBy: none
+		sourceColumn: Category
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Product Name'
+		dataType: string
+		lineageTag: b78d4acc-67ba-44b8-9c58-853a24c892db
+		summarizeBy: none
+		sourceColumn: Product Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sub-Category
+		dataType: string
+		lineageTag: 2d1904cd-6154-459d-b181-b68a9aec261b
+		summarizeBy: none
+		sourceColumn: Sub-Category
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Products = m
+		mode: import
+		queryGroup: Data_Model
+		source =
+				let
+				    Source = Cleaning_Products
+				in
+				    Source
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

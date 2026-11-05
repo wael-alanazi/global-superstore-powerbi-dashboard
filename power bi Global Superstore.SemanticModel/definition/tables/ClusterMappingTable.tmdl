@@ -1,0 +1,60 @@
+table ClusterMappingTable
+	isHidden
+	isPrivate
+	lineageTag: 75bb8ec7-7fdc-4243-a8c1-ef1d93cf7f98
+
+	column Customer_ID
+		lineageTag: fd3fb010-61ba-40d0-8dda-4c59af7357c3
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Customer_ID]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation __PBI_SemanticLinks = [{"LinkTarget":{"TableName":"Dim_Customers","TableItemName":"Customer clusters","ObjectType":4},"LinkType":"UsedInGroup"}]
+
+	column ClusterId
+		formatString: 0
+		lineageTag: 6aebf4a0-2ce2-471b-a288-ac1f49c02845
+		summarizeBy: count
+		isNameInferred
+		sourceColumn: [ClusterId]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation __PBI_SemanticLinks = [{"LinkTarget":{"TableName":"Dim_Customers","TableItemName":"Customer clusters","ObjectType":4},"LinkType":"UsedInGroup"}]
+
+	partition ClusterMappingTable = calculated
+		mode: import
+		source = ```
+				VAR __DS0Core = 
+					SUMMARIZECOLUMNS(
+						'Dim_Customers'[Customer ID],
+						"Total_Orders", '_Measures'[Total Orders],
+						"Total_Sales", '_Measures'[Total Sales]
+					)
+				
+				VAR __DataTransformT0 = 
+					KMeansClustering(
+						SELECTCOLUMNS(
+							__DS0Core,
+							"Customer_ID", 'Dim_Customers'[Customer ID],
+							"Total_Orders", [Total_Orders],
+							"Total_Sales", [Total_Sales]
+						),
+						{("[Customer_ID]", "Item"),
+							("[Total_Orders]", "Attribute"),
+							("[Total_Sales]", "Attribute")},
+						{("[Customer_ID]", BLANK()),
+							("ClusterId", "ClusterId")},
+						4
+					)
+				
+				RETURN __DataTransformT0
+				```
+			retainDataTillForceCalculate
+
+	annotation ClusterMappingTable = true
+
+	annotation __PBI_SemanticLinks = [{"LinkTarget":{"TableName":"Dim_Customers","TableItemName":"Customer clusters","ObjectType":4},"LinkType":"UsedInGroup"}]
+

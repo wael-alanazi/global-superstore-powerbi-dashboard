@@ -1,0 +1,274 @@
+table _Measures
+	lineageTag: 124bbfe2-2c45-44d5-a15a-c12d339f25dc
+
+	measure 'Total Sales' = SUM(Fact_Orders[Sales])
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		displayFolder: 1 Core
+		lineageTag: 926dec5c-d140-470c-81b3-19dcf80609bd
+
+		annotation __PBI_SemanticLinks = [{"LinkTarget":{"TableName":"Dim_Customers","TableItemName":"Customer clusters","ObjectType":4},"LinkType":"UsedInGroup"}]
+
+	measure 'Total Profit' = SUM(Fact_Orders[Profit])
+		formatString: \$#,0
+		displayFolder: 1 Core
+		lineageTag: dfd6b779-7c22-4329-a613-f56e73194bc8
+
+	measure 'Total Quantity' = SUM(Fact_Orders[Quantity])
+		formatString: #,0
+		displayFolder: 1 Core
+		lineageTag: 2afb8a48-9978-4a20-a26b-4d1930746c99
+
+	measure 'Total Orders' = DISTINCTCOUNT(Fact_Orders[Order ID])
+		formatString: #,0
+		displayFolder: 1 Core
+		lineageTag: 5dc8e0e4-0c99-4883-b81c-10a993502da0
+
+		annotation __PBI_SemanticLinks = [{"LinkTarget":{"TableName":"Dim_Customers","TableItemName":"Customer clusters","ObjectType":4},"LinkType":"UsedInGroup"}]
+
+	measure 'Total Customers' = DISTINCTCOUNT(Fact_Orders[Customer ID])
+		formatString: #,0
+		displayFolder: 1 Core
+		lineageTag: 3e6f020e-2d38-42b5-82a8-2225fe41fe16
+
+	measure 'Total Shipping Cost' = SUM(Fact_Orders[Shipping Cost])
+		formatString: \$#,0
+		displayFolder: 1 Core
+		lineageTag: 4a285ff9-fb6a-4a5a-8360-041b31d54e34
+
+	measure 'Profit Margin %' = DIVIDE([Total Profit], [Total Sales])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: 2 Ratios
+		lineageTag: 7bacfd1e-ffc3-4e02-98eb-6cbf85d5095a
+
+	measure 'Average Order Value' = DIVIDE([Total Sales], [Total Orders])
+		formatString: \$#,0.00
+		displayFolder: 2 Ratios
+		lineageTag: bff07fbe-8761-4a69-8e3f-330c07cf0acd
+
+	measure 'Shipping Cost % of Sales' = DIVIDE([Total Shipping Cost], [Total Sales])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: 2 Ratios
+		lineageTag: 88a0eacb-9fb4-4ebc-930f-1a1f8e1fff4a
+
+	measure 'Sales LY' = CALCULATE([Total Sales], SAMEPERIODLASTYEAR(Dim_Date[Date]))
+		formatString: \$#,0
+		displayFolder: 3 Time Intelligence
+		lineageTag: e05cef8a-1047-4214-b40f-bb4db3aa300d
+
+	measure 'Sales YoY %' = DIVIDE([Total Sales] - [Sales LY], [Sales LY])
+		formatString: \▲ 0.0%;\▼ 0.0%;0.0%
+		displayFolder: 3 Time Intelligence
+		lineageTag: f4fbfe41-d213-4dce-9e90-1b4feb09c150
+
+	measure 'Profit LY' = CALCULATE([Total Profit], SAMEPERIODLASTYEAR(Dim_Date[Date]))
+		formatString: \$#,0
+		displayFolder: 3 Time Intelligence
+		lineageTag: 2dc6c16f-33da-47d3-8f20-92755d2652ea
+
+	measure 'Profit YoY %' = DIVIDE([Total Profit] - [Profit LY], [Profit LY])
+		formatString: \▲ 0.0%;\▼ 0.0%;0.0%
+		displayFolder: 3 Time Intelligence
+		lineageTag: f66b3aad-d900-4a79-bff7-f29f3cd979f3
+
+	measure 'Profit Margin LY' = DIVIDE([Profit LY], [Sales LY])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: 3 Time Intelligence
+		lineageTag: 57e8a664-6ef4-4635-a9d4-d5aff92531db
+
+	measure 'Profit Margin YoY (pp)' = [Profit Margin %] - [Profit Margin LY]
+		formatString: \▲ 0.0%;\▼ 0.0%;0.0%
+		displayFolder: 3 Time Intelligence
+		lineageTag: fce0a55b-c8b1-44f4-b202-e0cdc3689029
+
+	measure 'Sales by Ship Date' = ```
+			
+			        CALCULATE([Total Sales], USERELATIONSHIP(Fact_Orders[Ship Date], Dim_Date[Date]))
+			```
+		formatString: \$#,0
+		displayFolder: 4 Shipping
+		lineageTag: 05a9ee58-d72f-434c-b271-a26375493521
+
+	measure 'Orders LY' = CALCULATE([Total Orders], SAMEPERIODLASTYEAR(Dim_Date[Date]))
+		formatString: #,0
+		displayFolder: 3 Time Intelligence
+		lineageTag: a3685983-f430-430e-b305-35e5237c1fe7
+
+	measure 'Orders YoY %' = DIVIDE([Total Orders] - [Orders LY], [Orders LY])
+		formatString: \▲ 0.0%;\▼ 0.0%;0.0%
+		displayFolder: 3 Time Intelligence
+		lineageTag: 3155a0d5-2898-4f0d-a3c6-f6aea7e6e90b
+
+	measure 'Quantity LY' = CALCULATE([Total Quantity], SAMEPERIODLASTYEAR(Dim_Date[Date]))
+		formatString: #,0
+		displayFolder: 3 Time Intelligence
+		lineageTag: 96837cbb-6d25-4d1c-8cc1-9914a245fdaf
+
+	measure 'Quantity YoY %' = DIVIDE([Total Quantity] - [Quantity LY], [Quantity LY])
+		formatString: \▲ 0.0%;\▼ 0.0%;0.0%
+		displayFolder: 3 Time Intelligence
+		lineageTag: c4ab5dfe-2941-40cc-b83f-c8542bf335a6
+
+	measure 'Average Order Value LY' = DIVIDE([Sales LY], [Orders LY])
+		formatString: \$#,0.00
+		displayFolder: 3 Time Intelligence
+		lineageTag: 40ed7b3d-293d-4270-9cb2-7e26f27ea9d7
+
+	measure 'Average Order Value YoY %' = DIVIDE([Average Order Value] - [Average Order Value LY], [Average Order Value LY])
+		formatString: \▲ 0.0%;\▼ 0.0%;0.0%
+		displayFolder: 3 Time Intelligence
+		lineageTag: aae44616-5e17-4272-b010-ae219e46b353
+
+	measure 'Sales YoY Color' = IF([Sales YoY %] < 0, "#F0696B", "#4FD1A0")
+		displayFolder: 5 Colors (card text)
+		lineageTag: 7d0cff98-28c4-4dea-b290-9eff9e992d82
+
+	measure 'Sales Trend Up' = VAR yoy = CALCULATE([Sales YoY %], REMOVEFILTERS(Dim_Date[Month Name]), REMOVEFILTERS(Dim_Date[Month Number])) RETURN IF(yoy >= 0, [Total Sales])
+		formatString: \$#,0
+		displayFolder: 6 Trend lines
+		lineageTag: 99814d77-637d-45ca-9a92-b13df76d9312
+
+	measure 'Sales Trend Down' = VAR yoy = CALCULATE([Sales YoY %], REMOVEFILTERS(Dim_Date[Month Name]), REMOVEFILTERS(Dim_Date[Month Number])) RETURN IF(yoy < 0, [Total Sales])
+		formatString: \$#,0
+		displayFolder: 6 Trend lines
+		lineageTag: dea37ab7-d288-47e9-bba6-90be83175d30
+
+	measure 'Profit YoY Color' = IF([Profit YoY %] < 0, "#F0696B", "#4FD1A0")
+		displayFolder: 5 Colors (card text)
+		lineageTag: f052465c-cb2b-4477-905f-427bc00c404e
+
+	measure 'Profit Trend Up' = VAR yoy = CALCULATE([Profit YoY %], REMOVEFILTERS(Dim_Date[Month Name]), REMOVEFILTERS(Dim_Date[Month Number])) RETURN IF(yoy >= 0, [Total Profit])
+		formatString: \$#,0
+		displayFolder: 6 Trend lines
+		lineageTag: d4571510-1c40-49e4-947b-d42f1f2bb277
+
+	measure 'Profit Trend Down' = VAR yoy = CALCULATE([Profit YoY %], REMOVEFILTERS(Dim_Date[Month Name]), REMOVEFILTERS(Dim_Date[Month Number])) RETURN IF(yoy < 0, [Total Profit])
+		formatString: \$#,0
+		displayFolder: 6 Trend lines
+		lineageTag: c35a9b89-059a-4e3a-85b4-c1d18cd2c7e2
+
+	measure 'Profit Margin YoY Color' = IF([Profit Margin YoY (pp)] < 0, "#F0696B", "#4FD1A0")
+		displayFolder: 5 Colors (card text)
+		lineageTag: e0b562f7-df07-472b-a5c1-4c304d04fa1a
+
+	measure 'Profit Margin Trend Up' = VAR yoy = CALCULATE([Profit Margin YoY (pp)], REMOVEFILTERS(Dim_Date[Month Name]), REMOVEFILTERS(Dim_Date[Month Number])) RETURN IF(yoy >= 0, [Profit Margin %])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: 6 Trend lines
+		lineageTag: 105eeecf-5de6-4541-86db-26d2889e441b
+
+	measure 'Profit Margin Trend Down' = VAR yoy = CALCULATE([Profit Margin YoY (pp)], REMOVEFILTERS(Dim_Date[Month Name]), REMOVEFILTERS(Dim_Date[Month Number])) RETURN IF(yoy < 0, [Profit Margin %])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: 6 Trend lines
+		lineageTag: 58c54f7a-ef35-4890-9fa0-8ecdd252786d
+
+	measure 'Orders YoY Color' = IF([Orders YoY %] < 0, "#F0696B", "#4FD1A0")
+		displayFolder: 5 Colors (card text)
+		lineageTag: aa38b2e1-723a-47bd-a8c5-aeab5c8e161c
+
+	measure 'Orders Trend Up' = VAR yoy = CALCULATE([Orders YoY %], REMOVEFILTERS(Dim_Date[Month Name]), REMOVEFILTERS(Dim_Date[Month Number])) RETURN IF(yoy >= 0, [Total Orders])
+		formatString: #,0
+		displayFolder: 6 Trend lines
+		lineageTag: 54c4c8df-b652-4588-ba9a-18ce9740394a
+
+	measure 'Orders Trend Down' = VAR yoy = CALCULATE([Orders YoY %], REMOVEFILTERS(Dim_Date[Month Name]), REMOVEFILTERS(Dim_Date[Month Number])) RETURN IF(yoy < 0, [Total Orders])
+		formatString: #,0
+		displayFolder: 6 Trend lines
+		lineageTag: f6cdb716-0391-4fee-b8fd-d4e48a9e6b18
+
+	measure 'Average Order Value YoY Color' = IF([Average Order Value YoY %] < 0, "#F0696B", "#4FD1A0")
+		displayFolder: 5 Colors (card text)
+		lineageTag: 7005dfa1-1cb7-4c4d-806a-52293eaf912b
+
+	measure 'Average Order Value Trend Up' = VAR yoy = CALCULATE([Average Order Value YoY %], REMOVEFILTERS(Dim_Date[Month Name]), REMOVEFILTERS(Dim_Date[Month Number])) RETURN IF(yoy >= 0, [Average Order Value])
+		formatString: \$#,0.00
+		displayFolder: 6 Trend lines
+		lineageTag: 74b352a9-7d1b-4ede-9816-9f8a300f6dba
+
+	measure 'Average Order Value Trend Down' = VAR yoy = CALCULATE([Average Order Value YoY %], REMOVEFILTERS(Dim_Date[Month Name]), REMOVEFILTERS(Dim_Date[Month Number])) RETURN IF(yoy < 0, [Average Order Value])
+		formatString: \$#,0.00
+		displayFolder: 6 Trend lines
+		lineageTag: d6acd684-c6cc-41e9-93b3-2b59a41f8b5d
+
+	measure 'Profit Color' = IF([Total Profit] < 0, "#D64545", "#22A06B")
+		displayFolder: 5 Colors (card text)
+		lineageTag: 158f6312-3c69-46c3-880e-154e43b76163
+
+	measure 'Total Loss' = CALCULATE(SUM(Fact_Orders[Profit]), Fact_Orders[Profit] < 0)
+		formatString: \$#,0;-\$#,0
+		displayFolder: 7 Profitability
+		lineageTag: 240e572d-e987-4da0-b13f-b7db77eb74ee
+
+	measure 'Loss-Making Lines %' = DIVIDE(CALCULATE(COUNTROWS(Fact_Orders), Fact_Orders[Profit] < 0), COUNTROWS(Fact_Orders))
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: 7 Profitability
+		lineageTag: 477718ad-b732-4ebf-901f-80a723d3c6e9
+
+	measure 'Avg Discount %' = AVERAGE(Fact_Orders[Discount])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: 7 Profitability
+		lineageTag: 46494d73-c321-42dc-affe-a6d71a33575e
+
+	measure 'Loss-Making Sub-Categories' = COUNTROWS(FILTER(VALUES(Dim_Products[Sub-Category]), [Total Profit] < 0))
+		formatString: #,0
+		displayFolder: 7 Profitability
+		lineageTag: 6895f95b-724d-4495-8a73-5b4b0238eb6f
+
+	measure 'Margin Heat Color' = VAR m = [Profit Margin %] RETURN IF(ISBLANK(m), BLANK(), SWITCH(TRUE(), m < 0, "#A64B50", m < 0.05, "#204F97", m < 0.10, "#2A62B8", m < 0.15, "#2D6ED2", "#4F8EE0"))
+		displayFolder: 5 Colors (card text)
+		lineageTag: 3f2b6cca-1d4f-4fe4-8dee-c89aad77296a
+
+	measure 'Profit Cell Color' = IF([Total Profit] < 0, "#F0696B", "#4FD1A0")
+		displayFolder: 5 Colors (card text)
+		lineageTag: 3c6aea31-b8e7-424f-8c7c-1cb15a631b30
+
+	measure 'Profit Cell Back' = IF([Total Profit] < 0, "#4F2A3A", "#1B4A7A")
+		displayFolder: 5 Colors (card text)
+		lineageTag: 64f240ad-7c2e-4e85-a8df-722659310600
+
+	measure 'Margin Row Color' = VAR m = [Profit Margin %] VAR avg = CALCULATE([Profit Margin %], REMOVEFILTERS(Dim_Date[Month Name]), REMOVEFILTERS(Dim_Date[Month Number])) RETURN IF(m < 0, "#F0696B", IF(m >= avg, "#4FD1A0", "#90ABD5"))
+		displayFolder: 5 Colors (card text)
+		lineageTag: 80ba911a-67fd-4450-910b-93783d435116
+
+	measure 'Top Product Color' = VAR r = RANKX(ALLSELECTED(Dim_Products[Product Name]), [Total Sales]) RETURN SWITCH(TRUE(), r = 1, "#CCD6E5", r <= 3, "#90ABD5", r <= 6, "#2D6ED2", "#204F97")
+		displayFolder: 5 Colors (card text)
+		lineageTag: f2f532bf-ecbc-4050-a959-a74f657c1da6
+
+	measure 'Profit Tier Color' = VAR p = [Total Profit] VAR best = MAXX(ALLSELECTED(Dim_Products[Sub-Category]), [Total Profit]) VAR share = DIVIDE(p, best) RETURN SWITCH(TRUE(), p < 0, "#F0696B", share >= 0.66, "#CCD6E5", share >= 0.33, "#90ABD5", "#2D6ED2")
+		displayFolder: 5 Colors (card text)
+		lineageTag: 22fb670f-f34d-49a6-9378-65240ff12d17
+
+	measure 'Avg Sales per Customer' = DIVIDE([Total Sales], [Total Customers])
+		formatString: \$#,0
+		displayFolder: 8 Customers
+		lineageTag: 73958c4a-2539-4ac2-a9b0-76c4c6301186
+
+	measure 'Orders per Customer' = DIVIDE([Total Orders], [Total Customers])
+		formatString: 0.0
+		displayFolder: 8 Customers
+		lineageTag: 362ad5e8-dd30-4050-b625-422cad82f2b1
+
+	measure 'Profit per Customer' = DIVIDE([Total Profit], [Total Customers])
+		formatString: \$#,0
+		displayFolder: 8 Customers
+		lineageTag: fae7b726-b5e3-448b-a179-bfa6911aed7c
+
+	column Column
+		dataType: string
+		lineageTag: f189590e-c75f-483f-88de-9aede9f9e47a
+		summarizeBy: none
+		sourceColumn: Column
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Measures = m
+		mode: import
+		queryGroup: Data_Model
+		source =
+				let
+				    Source = #table(type table [Column = text], {})
+				in
+				    Source
+
+	annotation PBI_ResultType = Table
+
+	annotation __PBI_SemanticLinks = [{"LinkTarget":{"TableName":"Dim_Customers","TableItemName":"Customer clusters","ObjectType":4},"LinkType":"UsedInGroup"}]
+

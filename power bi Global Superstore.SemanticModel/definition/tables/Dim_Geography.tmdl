@@ -1,0 +1,62 @@
+table Dim_Geography
+	lineageTag: da47af13-f277-44f8-986b-f3ca58656642
+
+	column City
+		dataType: string
+		lineageTag: 02796cbf-4126-49be-bb22-fcb7dfd63382
+		summarizeBy: none
+		sourceColumn: City
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country
+		dataType: string
+		lineageTag: 50c384ed-e36f-477b-8098-f2639675f060
+		summarizeBy: none
+		sourceColumn: Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column Market
+		dataType: string
+		lineageTag: 35f1ba0f-4a4b-46fb-bf91-d8d04b0e8948
+		summarizeBy: none
+		sourceColumn: Market
+
+		annotation SummarizationSetBy = Automatic
+
+	column Region
+		dataType: string
+		lineageTag: 764ac331-5386-42ee-9591-0a57bfb06886
+		summarizeBy: none
+		sourceColumn: Region
+
+		annotation SummarizationSetBy = Automatic
+
+	column State
+		dataType: string
+		lineageTag: 818436f3-4200-4f41-a793-c5cc7b29a922
+		summarizeBy: none
+		sourceColumn: State
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Location Key'
+		dataType: string
+		lineageTag: 20ee39a8-6bae-4876-90a7-32dcd08919b6
+		summarizeBy: none
+		sourceColumn: Location Key
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Geography = m
+		mode: import
+		queryGroup: Data_Model
+		source =
+				let
+				  Source = Cleaning_Geography
+				in
+				  Source
+
+	annotation PBI_ResultType = Table
+

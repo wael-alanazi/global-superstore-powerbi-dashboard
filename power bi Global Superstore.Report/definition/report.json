@@ -1,0 +1,171 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/report/3.3.0/schema.json",
+  "themeCollection": {
+    "baseTheme": {
+      "name": "Fluent2-CY26SU10",
+      "reportVersionAtImport": {
+        "visual": "2.14.0",
+        "report": "3.4.0",
+        "page": "2.3.1"
+      },
+      "type": "SharedResources"
+    },
+    "customTheme": {
+      "name": "SuperstoreExecutive.json",
+      "reportVersionAtImport": {
+        "visual": "2.14.0",
+        "report": "3.4.0",
+        "page": "2.3.1"
+      },
+      "type": "RegisteredResources"
+    }
+  },
+  "objects": {
+    "section": [
+      {
+        "properties": {
+          "verticalAlignment": {
+            "expr": {
+              "Literal": {
+                "Value": "'Top'"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "outspacePane": [
+      {
+        "properties": {
+          "expanded": {
+            "expr": {
+              "Literal": {
+                "Value": "false"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "resourcePackages": [
+    {
+      "name": "SharedResources",
+      "type": "SharedResources",
+      "items": [
+        {
+          "name": "Fluent2-CY26SU10",
+          "path": "BaseThemes/Fluent2-CY26SU10.json",
+          "type": "BaseTheme"
+        }
+      ]
+    },
+    {
+      "name": "RegisteredResources",
+      "type": "RegisteredResources",
+      "items": [
+        {
+          "name": "acc_1.png",
+          "path": "acc_1.png",
+          "type": "Image"
+        },
+        {
+          "name": "acc_2.png",
+          "path": "acc_2.png",
+          "type": "Image"
+        },
+        {
+          "name": "acc_3.png",
+          "path": "acc_3.png",
+          "type": "Image"
+        },
+        {
+          "name": "acc_4.png",
+          "path": "acc_4.png",
+          "type": "Image"
+        },
+        {
+          "name": "acc_5.png",
+          "path": "acc_5.png",
+          "type": "Image"
+        },
+        {
+          "name": "hdr_bg.png",
+          "path": "hdr_bg.png",
+          "type": "Image"
+        },
+        {
+          "name": "ic_calendar.svg",
+          "path": "ic_calendar.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ic_cart.svg",
+          "path": "ic_cart.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ic_globe.svg",
+          "path": "ic_globe.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ic_layers.svg",
+          "path": "ic_layers.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ic_percent.svg",
+          "path": "ic_percent.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ic_receipt.svg",
+          "path": "ic_receipt.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ic_sliders.svg",
+          "path": "ic_sliders.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ic_store.svg",
+          "path": "ic_store.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ic_tag.svg",
+          "path": "ic_tag.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ic_users.svg",
+          "path": "ic_users.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ic_wallet.svg",
+          "path": "ic_wallet.svg",
+          "type": "Image"
+        },
+        {
+          "name": "SuperstoreExecutive.json",
+          "path": "SuperstoreExecutive.json",
+          "type": "CustomTheme"
+        }
+      ]
+    }
+  ],
+  "settings": {
+    "useStylableVisualContainerHeader": true,
+    "exportDataMode": "AllowSummarized",
+    "defaultDrillFilterOtherVisuals": true,
+    "allowChangeFilterTypes": true,
+    "useEnhancedTooltips": true,
+    "useDefaultAggregateDisplayName": true,
+    "queryLimitOption": "None",
+    "customMemoryLimit": "1048576",
+    "customTimeoutLimit": "225"
+  }
+}

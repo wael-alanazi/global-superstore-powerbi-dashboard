@@ -1,0 +1,38 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "hdr_sub",
+  "position": {
+    "x": 94,
+    "y": 62,
+    "z": 4000,
+    "height": 30,
+    "width": 640,
+    "tabOrder": 23000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Customers & Segments  |  Who buys, and what drives a loss?",
+                    "textStyle": {
+                      "fontWeight": "normal",
+                      "fontSize": "12pt",
+                      "color": "#90ABD5"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}
